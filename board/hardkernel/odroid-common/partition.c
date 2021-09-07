@@ -35,7 +35,7 @@ static struct partitions factory_partitions[] = {
 		.name = "logo",			/* Logo */
 		.size = bytes_to_lba(2 * SZ_1M),
 	}, {
-		.name = "dtbs",			/* Device Tree */
+		.name = "dtbo",			/* Device Tree */
 		.size = bytes_to_lba(CONFIG_DTB_SIZE),
 	}, {
 		.name = "boot",			/* Boot image */
@@ -47,17 +47,8 @@ static struct partitions factory_partitions[] = {
 		.name = "cache",		/* Android: cache */
 		.size = bytes_to_lba(1 * SZ_1G),
 	}, {
-		.name = "odm",			/* Android:odm, DOS FAT */
-		.size = bytes_to_lba(32 * SZ_1M),
-	}, {
-		.name = "system",		/* Android: system */
-		.size = bytes_to_lba(SZ_2G - SZ_256M),
-	}, {
-		.name = "vendor",		/* Android: vendor */
-		.size = bytes_to_lba(SZ_512M),
-	}, {
-		.name = "product",		/* Android: product */
-		.size = bytes_to_lba(SZ_32M),
+		.name = "super",		/* Android: system */
+		.size = bytes_to_lba(SZ_2G),
 	}, {
 		.name = "param",
 		.size = bytes_to_lba(16 * SZ_1M),
@@ -164,8 +155,8 @@ int board_fdisk_all(void)
 	memset(mbr + DOS_PART_TBL_OFFSET, 0, sizeof(dos_partition_t) * 4);
 
 	disk_partition_t info;
-	/* Android : set the 'odm' partition entry */
-	ret = get_partition_info_mpt_by_name(dev_desc, "odm", &info);
+	/* Android : set the 'external_sd' partition entry */
+	ret = get_partition_info_mpt_by_name(dev_desc, "external_sd", &info);
 	if (ret < 0) {
 		printf("fastboot: no DOS partition is defined\n");
 		return -ENOENT;
